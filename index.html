@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="theme-color" content="#1bb566">
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=100&id=SVLJTaDkDrV9&format=png&color=000000" type="image/x-icon">
+    <title>New Tab</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+        body {
+            margin: 0;
+            background: #000;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            filter: blur(2px);
+        }
+        #container {
+            width: 200px;
+            height: 200px;
+            margin: 110px auto;
+            border: 1px solid #000;
+            display:grid;
+            grid-template-columns:50px;
+            grid-template-rows:50px;
+            place-content: center;
+            border-radius: 50%;
+        }
+        .item {
+            grid-area:1/1;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50%;
+            animation: spin 24s var(--d,0s) linear infinite; /* duration = 12s, numbor of item = 6 so a delay of 12/6 = 2s */
+            transform:rotate(0) translate(160px) rotate(0);
+            transition: all 0.3s;
+            z-index: 1 ;
+        }
+        .item:hover {
+            transform:rotate(0) translate(160px) rotate(0);
+            scale: 1.1;
+        }
+        #center-link {
+            z-index: 2;
+            grid-area: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(-15%) translateY(-15%);
+            width: 70px;
+            height: 70px;
+            color: white;
+            text-decoration: none;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 10px #02c4ff;
+            transition: all 0.3s;
+            outline: none
+        }
+        #center-link:hover {
+            box-shadow: 0 0 20px #0059ff;
+            scale: 1.5;
+            background: #ffffffbe;
+            scale: 1.5;
+        }
+        #center-link img {
+            width: 100%;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: none;
+        }
+
+        img{
+            padding: 3px;
+            width: 100%;
+            box-shadow: 0 0 15px #00ffff;
+            border-radius: 50%;
+        }
+        @keyframes spin {
+        100% {
+            transform:rotate(1turn) translate(160px) rotate(-1turn);
+        }
+        }
+
+        * {
+      box-sizing: border-box;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      height: 100vh;
+      font-family: 'Poppins', monospace;
+      color: white;
+    }
+
+    .search-container {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid #00ffff88;
+      border-radius: 15px;
+      padding: 10px;
+      box-shadow: 0 0 15px #00ffff83;
+      z-index: 1;
+    }
+
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .prompt {
+        font-family: 'Lekton', monospace;
+        color: #00ffff;
+        font-size: 18px;
+        pointer-events: none;
+        user-select: none;
+        margin-right: 2px;
+    }
+
+    #searchInput {
+      font-family: 'Lekton', monospace;
+      background: transparent;
+      border: none;
+      color: #00ffff;
+      font-size: 18px;
+      padding: 0;
+      margin: 0;
+      width: 1ch;
+      outline: none;
+      caret-color: transparent; /* hide real caret */
+      transition: width 0.3s ease;
+      min-width: 1ch;
+      max-width: 100%;
+    }
+
+    /* Blinking caret that follows text */
+    .caret {
+      position: absolute;
+      bottom: 0px;
+      width: 14px;
+      height: 2px;
+      background: #00ffff;
+      animation: blink 1s infinite;
+      pointer-events: none;
+    }
+    /* .caret::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 600%;
+      height: 2px;
+      background: #00ffff;
+      opacity: 0.5;
+      animation: blink 1s infinite;
+      transform: translateX(50%);
+    } */
+
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    #searchButton {
+      margin-left: 10px;
+      padding: 0;
+      font-size: 20px;
+      background: none;
+      border: none;
+      color: #00ffff;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #searchButton svg {
+      /* filter: drop-shadow(0px 0px 2px #00ffff); */
+    }
+
+    #searchButton:hover {
+      transform: scale(1.2);
+    }
+    </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="container">
+  <a id="center-link" href="https://dheeraj-nayak-2009.github.io/portfolio/" target="_blank"><img src="https://i.postimg.cc/BZgCHN6W/1000397611-removebg-preview.png" alt="Portfolio"></a>
+  <a class="item" href="https://www.google.com" target="_blank" style="--d:0s"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png" alt="Google"></a>
+  <a class="item" href="https://youtube.com" target="_blank" style="--d:-3s"><img src="https://static.vecteezy.com/system/resources/previews/042/127/122/non_2x/red-circle-bordered-youtube-logo-with-long-shadow-on-transparent-background-free-png.png" alt="Youtube"></a>
+  <a class="item" href="https://canva.com" target="_blank" style="--d:-6s"><img src="https://freelogopng.com/images/all_img/1656733807canva-icon-png.png" alt="Canva"></a>
+  <a class="item" href="https://gmail.com" target="_blank" style="--d:-9s"><img src="https://images.icon-icons.com/2642/PNG/512/google_mail_gmail_logo_icon_159346.png" alt="GMail"></a>
+  <a class="item" href="https://whatsapp.com" target="_blank" style="--d:-12s"><img src="https://images.icon-icons.com/1476/PNG/512/whatsapp_101778.png" alt="Whatsapp"></a>
+  <a class="item" href="https://chatgpt.com" target="_blank" style="--d:-15s"><img src="https://pngimg.com/d/chatgpt_PNG14.png" alt="ChatGPT"></a>
+  <a class="item" href="https://bandlab.com" target="_blank" style="--d:-18s"><img src="https://img.icons8.com/color/512/bandlab.png" alt="Bandlab"></a>
+  <a class="item" href="https://github.com" target="_blank" style="--d:-21s"><img src="https://cdn.iconscout.com/icon/free/png-256/free-github-logo-icon-download-in-svg-png-gif-file-formats--70-flat-social-icons-color-pack-logos-432516.png?f=webp&w=256" alt="Github"></a>
+</div>
+<div class="search-container">
+    <div class="input-wrapper">
+    <div class="prompt">&gt;</div>
+    <input id="searchInput" type="text" spellcheck="false" autocomplete="off" />
+    <div id="caret" class="caret"></div>
+    </div>
+    <button id="searchButton" onclick="google()">
+        <svg id="eek75pojmJ01" width="30" height="30" viewBox="0 0 48 48" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" project-id="4c29bb4b70274e24b46661b37a12ca8b" export-id="587501ec57fe494099e42bbaab8f2460" cached="false"><g transform="translate(0 0.000001)"><g><rect width="7.82666" height="14.786748" rx="0" ry="0" transform="matrix(.663793-.747916 1.180022 1.047297 21.904878 30.194744)" fill="#4ca550" stroke-width="0"/><rect width="7.82666" height="14.786748" rx="0" ry="0" transform="matrix(.428397-.483913 1.249066 1.10577 24.00178 25.84656)" fill="#176bc0" stroke-width="0"/><g transform="matrix(.782666 0 0 0.78267-1.783984-1.354829)"><path d="M43.611,20.083h-1.611L42,20h-18v8h11.303c-1.649,4.657-6.08,8-11.303,8-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20c0-1.341-.138-2.65-.389-3.917Z" fill="#ffc107"/><path d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691Z" fill="#ff3d00"/><path d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946L6.195,33.079C9.505,39.556,16.227,44,24,44Z" fill="#4caf50"/><path d="M43.611,20.083h-1.611L42,20h-18v8h11.303c-.792,2.237-2.231,4.166-4.087,5.571.001-.001.002-.001.003-.002l6.19,5.238C36.971,39.205,44,34,44,24c0-1.341-.138-2.65-.389-3.917Z" fill="#1976d2"/></g></g><rect width="9.490344" height="1.874859" rx="0" ry="0" transform="matrix(.747807-.813927 1.581275 1.452819 23.211229 31.674403)" fill="#393938" stroke-width="0"/><ellipse rx="14.377559" ry="14.377559" transform="translate(17 17.429251)" fill="rgba(111,159,255,0.2)" stroke-width="0"/><path d="M1.34668,17.42925C1.34668,8.78412,8.35491,1.77585,17,1.77585s15.65332,7.00826,15.65332,15.6534-7.00823,15.6534-15.65332,15.6534-15.65332-7.00826-15.65332-15.6534ZM17,31.05842c7.52721,0,13.62921-6.10199,13.62921-13.62917s-6.10201-13.62917-13.62921-13.62917-13.62921,6.10199-13.62921,13.62917s6.10201,13.62917,13.62921,13.62917Z" fill="#393938" stroke-width="0"/><ellipse rx="3.91333" ry="6.906476" transform="matrix(.860482-1.881517 1.433349 0.655519 18.523767 13.421542)" fill="rgba(255,255,255,0.15)" stroke-width="0"/></g></svg>
+    </button>
+</div>
+<script>
+    const input = document.getElementById('searchInput');
+    const caret = document.getElementById('caret');
+
+    input.focus();
+
+    window.addEventListener('keydown', () => {
+      input.focus();
+    });
+
+    // Text width measurement element
+    const textMeasure = document.createElement('span');
+    textMeasure.style.visibility = 'hidden';
+    textMeasure.style.position = 'absolute';
+    textMeasure.style.whiteSpace = 'pre';
+    textMeasure.style.font = window.getComputedStyle(input).font;
+    document.body.appendChild(textMeasure);
+
+    const prompt = document.querySelector('.prompt');
+
+    function updateInput() {
+    textMeasure.textContent = '>' + (input.value || '\u200B');
+    const promptWidth = prompt.getBoundingClientRect().width;
+    const textWidth = textMeasure.getBoundingClientRect().width;
+
+    input.style.width = `${textWidth - promptWidth + 2}px`;
+    caret.style.left = `${textWidth + 2}px`;
+    }
+
+    input.addEventListener('input', updateInput);
+    window.addEventListener('load', updateInput);
+
+    function google() {
+      const query = input.value.trim();
+      if (query) {
+        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+      }
+    }
+</script>
+<script>
+(function(w) {
+    var canvas, ctx;
+    var mouse = { x: 0, y: 0, px: 0, py: 0 };
+    var canvas_width, canvas_height;
+    var resolution = 10;
+    var pen_size = 40;
+    var num_cols, num_rows;
+    var particlesPerSquarePixel = 0.008;
+    var speck_count;
+    var vec_cells = [];
+    var particles = [];
+    var currentColor = null;
+
+    function init() {
+        canvas = document.getElementById("c");
+        ctx = canvas.getContext("2d");
+        resizeCanvas();
+        speck_count = Math.floor(canvas_width * canvas_height * particlesPerSquarePixel);
+        for (var i = 0; i < speck_count; i++) {
+            particles.push(new particle(Math.random() * canvas_width, Math.random() * canvas_height));
+        }
+        for (var col = 0; col < num_cols; col++) {
+            vec_cells[col] = [];
+            for (var row = 0; row < num_rows; row++) {
+                var cell_data = new cell(col * resolution, row * resolution, resolution);
+                vec_cells[col][row] = cell_data;
+                cell_data.col = col;
+                cell_data.row = row;
+            }
+        }
+        for (var col = 0; col < num_cols; col++) {
+            for (var row = 0; row < num_rows; row++) {
+                var cell_data = vec_cells[col][row];
+                var row_up = (row - 1 >= 0) ? row - 1 : num_rows - 1;
+                var col_left = (col - 1 >= 0) ? col - 1 : num_cols - 1;
+                var col_right = (col + 1 < num_cols) ? col + 1 : 0;
+                var up = vec_cells[col][row_up];
+                var left = vec_cells[col_left][row];
+                var up_left = vec_cells[col_left][row_up];
+                var up_right = vec_cells[col_right][row_up];
+                cell_data.up = up;
+                cell_data.left = left;
+                cell_data.up_left = up_left;
+                cell_data.up_right = up_right;
+                up.down = vec_cells[col][row];
+                left.right = vec_cells[col][row];
+                up_left.down_right = vec_cells[col][row];
+                up_right.down_left = vec_cells[col][row];
+            }
+        }
+        canvas.addEventListener("mousemove", mouse_move_handler);
+        canvas.addEventListener("touchmove", touch_move_handler);
+        w.addEventListener("resize", resizeCanvas);
+        w.onload = draw;
+    }
+
+    function resizeCanvas() {
+        canvas_width = window.innerWidth;
+        canvas_height = window.innerHeight;
+        canvas.width = canvas_width;
+        canvas.height = canvas_height;
+        num_cols = Math.floor(canvas_width / resolution);
+        num_rows = Math.floor(canvas_height / resolution);
+    }
+
+    function update_particle() {
+        for (var i = 0; i < particles.length; i++) {
+            var p = particles[i];
+            p.x += p.xv;
+            p.y += p.yv;
+            if (p.x < 0) { p.x += canvas_width; p.px += canvas_width; }
+            else if (p.x >= canvas_width) { p.x -= canvas_width; p.px -= canvas_width; }
+            if (p.y < 0) { p.y += canvas_height; p.py += canvas_height; }
+            else if (p.y >= canvas_height) { p.y -= canvas_height; p.py -= canvas_height; }
+            var col = parseInt(p.x / resolution);
+            var row = parseInt(p.y / resolution);
+            if (col >= 0 && col < num_cols && row >= 0 && row < num_rows) {
+                var cell_data = vec_cells[col][row];
+                var ax = (p.x % resolution) / resolution;
+                var ay = (p.y % resolution) / resolution;
+                p.xv += (1 - ax) * cell_data.xv * 0.05;
+                p.yv += (1 - ay) * cell_data.yv * 0.05;
+                p.xv += ax * cell_data.right.xv * 0.05;
+                p.yv += ax * cell_data.right.yv * 0.05;
+                p.xv += ay * cell_data.down.xv * 0.05;
+                p.yv += ay * cell_data.down.yv * 0.05;
+                var dx = p.px - p.x;
+                var dy = p.py - p.y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                var limit = Math.random() * 0.5;
+                var velocity = Math.sqrt(p.xv * p.xv + p.yv * p.yv);
+                var brightness = Math.min(velocity * 100, 100);
+                var baseColor = p.color || `rgb(${Math.round(brightness)}, ${Math.round(brightness)}, ${Math.round(brightness)})`;
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = baseColor;
+                if (dist > limit) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.px, p.py);
+                    ctx.stroke();
+                }
+                updateParticleColor(p);
+                p.px = p.x;
+                p.py = p.y;
+            }
+            p.xv *= 0.5;
+            p.yv *= 0.5;
+        }
+    }
+
+    function updateParticleColor(p) {
+        if (p.color) {
+            var current = rgbToRgb(p.color);
+            current.r = Math.max(0, current.r - 1.42);
+            current.g = Math.max(0, current.g - 1.42);
+            current.b = Math.max(0, current.b - 1.42);
+            p.color = `rgb(${Math.round(current.r)}, ${Math.round(current.g)}, ${Math.round(current.b)})`;
+            if (current.r <= 10 && current.g <= 10 && current.b <= 10) {
+                p.color = null;
+            }
+        }
+    }
+
+    function rgbToRgb(rgb) {
+        var match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        return {
+            r: parseInt(match[1]),
+            g: parseInt(match[2]),
+            b: parseInt(match[3])
+        };
+    }
+
+    function draw() {
+        var mouse_xv = mouse.x - mouse.px;
+        var mouse_yv = mouse.y - mouse.py;
+        for (var i = 0; i < vec_cells.length; i++) {
+            var cell_datas = vec_cells[i];
+            for (var j = 0; j < cell_datas.length; j++) {
+                var cell_data = cell_datas[j];
+                change_cell_velocity(cell_data, mouse_xv, mouse_yv, pen_size);
+                update_pressure(cell_data);
+            }
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        update_particle();
+        for (var i = 0; i < vec_cells.length; i++) {
+            var cell_datas = vec_cells[i];
+            for (var j = 0; j < cell_datas.length; j++) {
+                update_velocity(cell_datas[j]);
+            }
+        }
+        mouse.px = mouse.x;
+        mouse.py = mouse.y;
+        requestAnimationFrame(draw);
+    }
+
+    function change_cell_velocity(cell_data, mvelX, mvelY, pen_size) {
+        var dx = cell_data.x - mouse.x;
+        var dy = cell_data.y - mouse.y;
+        var dist = Math.sqrt(dy * dy + dx * dx);
+        if (dist < pen_size) {
+            if (dist < 4) dist = pen_size;
+            var power = pen_size / dist;
+            cell_data.xv += mvelX * power;
+            cell_data.yv += mvelY * power;
+
+            // Generate a new shared color
+            currentColor = `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`;
+
+            // Apply to all nearby particles
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                if (Math.abs(p.x - cell_data.x) < resolution && Math.abs(p.y - cell_data.y) < resolution) {
+                    p.color = currentColor;
+                }
+            }
+        }
+    }
+
+    function update_pressure(cell_data) {
+        var pressure_x = (
+            cell_data.up_left.xv * 0.5 + cell_data.left.xv + cell_data.down_left.xv * 0.5
+            - cell_data.up_right.xv * 0.5 - cell_data.right.xv - cell_data.down_right.xv * 0.5
+        );
+        var pressure_y = (
+            cell_data.up_left.yv * 0.5 + cell_data.up.yv + cell_data.up_right.yv * 0.5
+            - cell_data.down_left.yv * 0.5 - cell_data.down.yv - cell_data.down_right.yv * 0.5
+        );
+        cell_data.pressure = (pressure_x + pressure_y) * 0.25;
+    }
+
+    function update_velocity(cell_data) {
+        cell_data.xv += (
+            cell_data.up_left.pressure * 0.5 + cell_data.left.pressure + cell_data.down_left.pressure * 0.5
+            - cell_data.up_right.pressure * 0.5 - cell_data.right.pressure - cell_data.down_right.pressure * 0.5
+        ) * 0.25;
+        cell_data.yv += (
+            cell_data.up_left.pressure * 0.5 + cell_data.up.pressure + cell_data.up_right.pressure * 0.5
+            - cell_data.down_left.pressure * 0.5 - cell_data.down.pressure - cell_data.down_right.pressure * 0.5
+        ) * 0.25;
+        cell_data.xv *= 0.99;
+        cell_data.yv *= 0.99;
+    }
+
+    function cell(x, y, res) {
+        this.x = x; this.y = y; this.r = res;
+        this.col = 0; this.row = 0;
+        this.xv = 0; this.yv = 0;
+        this.pressure = 0;
+    }
+
+    function particle(x, y) {
+        this.x = this.px = x;
+        this.y = this.py = y;
+        this.xv = this.yv = 0;
+        this.color = null;
+    }
+
+    function mouse_move_handler(e) {
+        e.preventDefault();
+        mouse.px = mouse.x; mouse.py = mouse.y;
+        mouse.x = e.offsetX || e.layerX;
+        mouse.y = e.offsetY || e.layerY;
+    }
+
+    function touch_move_handler(e) {
+        e.preventDefault();
+        mouse.px = mouse.x; mouse.py = mouse.y;
+        var rect = canvas.getBoundingClientRect();
+        mouse.x = e.touches[0].pageX - rect.left;
+        mouse.y = e.touches[0].pageY - rect.top;
+    }
+
+    w.Fluid = { initialize: init };
+})(window);
+
+window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
+Fluid.initialize();
+</script>
+</body>
+</html>
